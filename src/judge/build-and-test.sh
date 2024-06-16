@@ -129,7 +129,7 @@ compile() {
 	local output=$2
 	local flags=$3
 
-    gcc -w $src_files -o $output $flags >> $LOGFILE 2>&1
+	gcc -w $src_files -o $output $flags >>$LOGFILE 2>&1
 
 	if [[ $? -ne 0 ]]; then
 		echo "Compilation Error"
@@ -147,6 +147,12 @@ if [[ -e $PROBLEMTEMPLATEDIR/scripts/$LANGUAGE/mainfunction.c ]]; then
 	cp $SRCCODE /tmp/dir
 	# compile "/tmp/dir/mainfunction.c $SRCCODE" "$workdirbase/main" "$CFLAGS"
 	make -C /tmp/dir -f /tmp/dir/Makefile >>$LOGFILE 2>&1
+	if [[ $? -ne 0 ]]; then
+		echo "Compilation Error"
+		LOG "COMPILATION ERROR"
+		LOG "$(cat $LOGFILE)"
+		exit 1
+	fi
 	cp /tmp/dir/main $workdirbase/main
 
 else

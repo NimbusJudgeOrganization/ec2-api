@@ -52,7 +52,8 @@ def handler(event, context):
         stdout, stderr, returncode = cmdline(command)
         
         if returncode != 0:
-            raise RuntimeError(f"Command failed with return code {returncode}: {stderr.decode('utf-8')}")
+            stdout, _stderr, _returncode = cmdline('cat /tmp/rwdir/build-and-test.log')
+            raise RuntimeError(f"Command failed with return code {returncode}: {stdout}")
         
         build_and_test_output = stdout.decode('utf-8')
         lines = build_and_test_output.strip().split('\n')
